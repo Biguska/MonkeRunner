@@ -1,6 +1,8 @@
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -28,11 +30,6 @@ public class PlayerController : MonoBehaviour
             set { _roadCoordinate = value; }
         }
     }
-    
-    [SerializeField] private GameObject _playerObject;
-    [SerializeField] private CapsuleCollider _playerCollider;
-    [SerializeField] private SphereCollider _jumpTriger;
-
     /*
      left -1
      midle 0
@@ -44,36 +41,58 @@ public class PlayerController : MonoBehaviour
         new Road(0, 0),
         new Road(1, 2)
     };
+    
+    [SerializeField] private GameObject _playerObject;
+    [SerializeField] private CapsuleCollider _playerCollider;
+    [SerializeField] private float _jumpForce = 7f;
+    [SerializeField] private float _diveForce = -5f;
 
     private Rigidbody _rigidbody;
-    private Transform _transform;
     
     private int _currentPosition = 0;
-    private bool _isGround = true;
-    private bool _isJumping = false;
+    private int _oldPosition = 0;
     private bool _isMovingSide = false;
+    public Sequence _moveSequence;
+    
+    public bool _isGround = true;
+    private bool _isJumping = false;
+    
+    public bool _isCroll = false;
+    private IEnumerator _crollCoroutine = null;
+    private float _crollTime = 1f;
 
     private void Start()
     {
         _rigidbody = _playerObject.GetComponent<Rigidbody>();
-        _transform = _playerObject.GetComponent<Transform>();
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
+            if(IsCroll())
+                StopScroll();
             MoveToSide(-1);
         }
 
         if (Input.GetKeyDown(KeyCode.D))
         {
+            if(IsCroll())
+                StopScroll();
             MoveToSide(1);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if(TryToJump()) Jump();
+        if (Input.GetKeyDown(KeyCode.Space) && _isGround)
+        { 
+            if(IsCroll())
+                StopScroll();
+            Jump();
+        }
+        
+        if (Input.GetKeyDown(KeyCode.S) && !_isCroll)
+        { 
+            if(!IsCroll())
+                Croll();
         }
     }
 
@@ -83,21 +102,86 @@ public class PlayerController : MonoBehaviour
         var side = _roadsList.Find(road => road.RoadId == newSide);
         if (side != null)
         {
+            if (newSide == _oldPosition && _moveSequence != null)
+            {
+                _moveSequence.Kill();
+                _moveSequence = null;
+            }
+            
+            if (_moveSequence == null)
+                _moveSequence = DOTween.Sequence();
+            
+            _oldPosition = _currentPosition;
             _currentPosition = side.RoadId;
-            _transform.position = new Vector3(side.RoadCoordinate, _transform.position.y, _transform.position.z);
+            _moveSequence.Append(transform.DOMoveX(side.RoadCoordinate, .25f)
+                    .SetEase(Ease.InQuad))
+                .OnComplete(() =>
+                {
+                    _moveSequence = null;
+                });
+            
+            //Нельзя добавлять к секуенсе, которая стартовала уже. Шоб было как в сабвей серфе нужно добавить костыль с очередью секуенцев
         }
-    }
-
-    private bool TryToJump()
-    {
-        if (_isGround && !_isJumping)
-            return true;
-        else
-            return false;
+            
     }
 
     private void Jump()
     {
-        _rigidbody.AddForce(new Vector3(0, 5, 0), ForceMode.Impulse);
+        _rigidbody.AddForce(new Vector3(0f, _jumpForce, 0f), ForceMode.Impulse);
+        _isGround = false;
+    }
+
+    private void Croll()
+    {
+        if (!_isGround)
+        {
+            _rigidbody.AddForce(new Vector3(0f, _diveForce, 0f), ForceMode.Impulse);
+        }
+
+        _crollCoroutine = CrollCoroutine();
+        StartCoroutine(_crollCoroutine);
+    }
+
+    private IEnumerator CrollCoroutine()
+    {
+        StartCroll();
+        yield return new WaitForSeconds(_crollTime);
+        EndCroll();
+    }
+
+    private void StartCroll()
+    {
+        _isCroll = true;
+        _playerCollider.center = new Vector3(0f, 0.5f, 0f);
+        _playerCollider.height = 1f;
+    }
+
+    private void EndCroll()
+    {
+        _isCroll = false;
+        _playerCollider.center = new Vector3(0f, 1f, 0f);
+        _playerCollider.height = 2f;
+        _crollCoroutine = null;
+    }
+
+    private bool IsCroll()
+    {
+        if (_crollCoroutine == null)
+            return false;
+        else
+            return true;
+    }
+
+    private void StopScroll()
+    {
+        StopCoroutine(_crollCoroutine);
+        EndCroll();
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            _isGround = true;
+        }
     }
 }

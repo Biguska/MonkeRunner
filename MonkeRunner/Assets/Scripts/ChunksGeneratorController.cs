@@ -1,22 +1,45 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using DG.Tweening;
+using Random = UnityEngine.Random;
 
 public class ChunksGeneratorController : MonoBehaviour
 {
     [SerializeField] private List<GameObject> _chunksBoofer;
     [SerializeField] private Transform _rotateObject;
+    [SerializeField] private Transform _chunksParent;
 
     private void Start()
     {
-        _rotateObject.DORotate(new Vector3(-360, 0, 0), 250, RotateMode.FastBeyond360)
-            .SetEase(Ease.Linear);
+        StartRotate();
     }
 
-    private void AddChunk()
+    private void StartRotate()
     {
-        
+        _rotateObject.DORotate(new Vector3(-360f, 0f, 0f), 50f, RotateMode.FastBeyond360)
+            .SetEase(Ease.Linear)
+            .OnComplete(() =>
+            {
+                _rotateObject.eulerAngles = new(0f,0f,0f);
+                StartRotate();
+            });
+    }
+    
+    public void AddChunk()
+    {
+        var chunk = _chunksBoofer[Random.Range(0, _chunksBoofer.Count)];
+        _chunksBoofer.Remove(chunk);
+        chunk.transform.SetParent(_rotateObject);
+        chunk.transform.eulerAngles = new Vector3(27.8f, 0f,0f);
+
+    }
+
+    public void RemoveChunk(GameObject chunk)
+    {
+        chunk.transform.SetParent(_chunksParent);
+        _chunksBoofer.Add(chunk);
     }
 }
