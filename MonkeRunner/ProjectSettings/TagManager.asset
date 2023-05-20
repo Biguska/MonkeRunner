@@ -7,6 +7,8 @@ TagManager:
   - Ground
   - ChunkSpawn
   - ChunkRemove
+  - Hill
+  - Obstacle
   layers:
   - Default
   - TransparentFX

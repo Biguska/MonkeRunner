@@ -41,9 +41,11 @@ public class PlayerController : MonoBehaviour
         new Road(0, 0),
         new Road(1, 2)
     };
-    
+
+    [SerializeField] private ChunksGeneratorController _chunksGeneratorController;
     [SerializeField] private GameObject _playerObject;
     [SerializeField] private CapsuleCollider _playerCollider;
+    [SerializeField] private Transform _playerModel;
     [SerializeField] private float _jumpForce = 7f;
     [SerializeField] private float _diveForce = -5f;
 
@@ -154,6 +156,8 @@ public class PlayerController : MonoBehaviour
         _isCroll = true;
         _playerCollider.center = new Vector3(0f, 0.5f, 0f);
         _playerCollider.height = 1f;
+        _playerModel.localPosition = new Vector3(0f, 0.5f, 0f);
+        _playerModel.localScale = new Vector3(1.5f, 1f, 1f);
     }
 
     private void EndCroll()
@@ -161,6 +165,8 @@ public class PlayerController : MonoBehaviour
         _isCroll = false;
         _playerCollider.center = new Vector3(0f, 1f, 0f);
         _playerCollider.height = 2f;
+        _playerModel.localPosition = new Vector3(0f, 1f, 0f);
+        _playerModel.localScale = new Vector3(1.5f, 2f, 1f);
         _crollCoroutine = null;
     }
 
@@ -182,6 +188,17 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             _isGround = true;
+            _rigidbody.velocity = new Vector3(0f, 0f, 0f);
+        }
+
+        if (collision.gameObject.CompareTag("Hill"))
+        {
+            _isGround = true;
+        }
+
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            _chunksGeneratorController.GameOver();
         }
     }
 }
