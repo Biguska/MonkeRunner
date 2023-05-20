@@ -11,11 +11,13 @@ public class PlayerController : MonoBehaviour
     {
         private int _roadId;
         private int _roadCoordinate;
+        private int _cameraCoordinate;
 
-        public Road(int roadId, int roadCoordinate)
+        public Road(int roadId, int roadCoordinate, int cameraCoordinate)
         {
             _roadId = roadId;
             _roadCoordinate = roadCoordinate;
+            _cameraCoordinate = cameraCoordinate;
         }
 
         public int RoadId
@@ -29,6 +31,12 @@ public class PlayerController : MonoBehaviour
             get { return _roadCoordinate; }
             set { _roadCoordinate = value; }
         }
+        
+        public int CameraCoordinate
+        {
+            get { return _cameraCoordinate; }
+            set { _cameraCoordinate = value; }
+        }
     }
     /*
      left -1
@@ -37,11 +45,12 @@ public class PlayerController : MonoBehaviour
      */
     private List<Road> _roadsList = new List<Road>
     {
-        new Road(-1, -2),
-        new Road(0, 0),
-        new Road(1, 2)
+        new Road(-1, -4,-3),
+        new Road(0, 0,0),
+        new Road(1, 4,3)
     };
 
+    [SerializeField] private Transform _mainCamera;
     [SerializeField] private ChunksGeneratorController _chunksGeneratorController;
     [SerializeField] private GameObject _playerObject;
     [SerializeField] private CapsuleCollider _playerCollider;
@@ -117,6 +126,8 @@ public class PlayerController : MonoBehaviour
             _currentPosition = side.RoadId;
             _moveSequence.Append(transform.DOMoveX(side.RoadCoordinate, .25f)
                     .SetEase(Ease.InQuad))
+                .Join(_mainCamera.DOMoveX(side.CameraCoordinate, .35f)
+                    .SetEase(Ease.InOutSine))
                 .OnComplete(() =>
                 {
                     _moveSequence = null;
