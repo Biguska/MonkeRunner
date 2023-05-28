@@ -19,7 +19,7 @@ public class ChunksGeneratorController : MonoBehaviour
 
     private void StartRotate()
     {
-        _rotateObject.DORotate(new Vector3(-360f, 0f, 0f), 250f, RotateMode.FastBeyond360)
+        _rotateObject.DORotate(new Vector3(-360f, 0f, 0f), 100f, RotateMode.FastBeyond360)
             .SetEase(Ease.Linear)
             .OnComplete(() =>
             {
@@ -33,7 +33,7 @@ public class ChunksGeneratorController : MonoBehaviour
         var chunk = _chunksBoofer[Random.Range(0, _chunksBoofer.Count)];
         _chunksBoofer.Remove(chunk);
         chunk.transform.SetParent(_rotateObject);
-        chunk.transform.eulerAngles = new Vector3(19.5f, 0f,0f);
+        chunk.transform.eulerAngles = new Vector3(57.6f, 0f,0f);
 
     }
 

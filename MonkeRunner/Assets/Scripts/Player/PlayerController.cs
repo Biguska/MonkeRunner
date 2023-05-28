@@ -58,6 +58,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _jumpForce = 7f;
     [SerializeField] private float _diveForce = -5f;
 
+    [SerializeField] private Animator _animator;
+    
     private Rigidbody _rigidbody;
     
     private int _currentPosition = 0;
@@ -75,10 +77,12 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         _rigidbody = _playerObject.GetComponent<Rigidbody>();
+        _animator.SetTrigger("IsGround");
     }
 
     private void Update()
     {
+        
         if (Input.GetKeyDown(KeyCode.A))
         {
             if(IsCroll())
@@ -142,6 +146,7 @@ public class PlayerController : MonoBehaviour
     {
         _rigidbody.AddForce(new Vector3(0f, _jumpForce, 0f), ForceMode.Impulse);
         _isGround = false;
+        _animator.SetTrigger("Jump");
     }
 
     private void Croll()
@@ -151,6 +156,7 @@ public class PlayerController : MonoBehaviour
             _rigidbody.AddForce(new Vector3(0f, _diveForce, 0f), ForceMode.Impulse);
         }
 
+        _animator.SetTrigger("Croll");
         _crollCoroutine = CrollCoroutine();
         StartCoroutine(_crollCoroutine);
     }
@@ -198,8 +204,12 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            _isGround = true;
-            _rigidbody.velocity = new Vector3(0f, 0f, 0f);
+            if (!_isGround)
+            {
+                _isGround = true;
+                _rigidbody.velocity = new Vector3(0f, 0f, 0f);
+                _animator.SetTrigger("IsGround");
+            }
         }
 
         if (collision.gameObject.CompareTag("Hill"))
