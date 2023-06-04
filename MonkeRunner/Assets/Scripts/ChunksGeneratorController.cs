@@ -8,6 +8,8 @@ using Random = UnityEngine.Random;
 
 public class ChunksGeneratorController : MonoBehaviour
 {
+    [SerializeField] private float _rotateDuration = 50f;
+    
     [SerializeField] private List<GameObject> _chunksBoofer;
     [SerializeField] private Transform _rotateObject;
     [SerializeField] private Transform _chunksParent;
@@ -19,7 +21,7 @@ public class ChunksGeneratorController : MonoBehaviour
 
     private void StartRotate()
     {
-        _rotateObject.DORotate(new Vector3(-360f, 0f, 0f), 100f, RotateMode.FastBeyond360)
+        _rotateObject.DORotate(new Vector3(-360f, 0f, 0f), _rotateDuration, RotateMode.FastBeyond360)
             .SetEase(Ease.Linear)
             .OnComplete(() =>
             {

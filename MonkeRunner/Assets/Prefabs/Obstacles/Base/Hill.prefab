@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9213009214858418070}
   - component: {fileID: 7823675336907381620}
   - component: {fileID: 5250161466335496547}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Hill
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   m_Component:
   - component: {fileID: 278940238869725332}
   - component: {fileID: -6504343037926129173}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Hill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
