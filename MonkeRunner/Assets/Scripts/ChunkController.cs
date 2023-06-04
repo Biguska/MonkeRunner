@@ -11,13 +11,11 @@ public class ChunkController : MonoBehaviour
     {
         if (obj.gameObject.CompareTag("ChunkSpawn"))
         {
-            Debug.Log("Spawn");
             _chunksGeneratorController.AddChunk();
         }
 
         if (obj.gameObject.CompareTag("ChunkRemove"))
         {
-            Debug.Log("Remove");
             _chunksGeneratorController.RemoveChunk(gameObject);
             ResetChunk();
         }
