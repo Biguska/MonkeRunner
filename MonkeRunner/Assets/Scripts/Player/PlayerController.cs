@@ -75,6 +75,7 @@ public class PlayerController : MonoBehaviour
     public bool _isGround = true;
     private bool _isJumping = false;
     private bool _isCameraDown = true;
+    private bool _isGettingHit = false;
     
     public bool _isCroll = false;
     private IEnumerator _crollCoroutine = null;
@@ -113,14 +114,14 @@ public class PlayerController : MonoBehaviour
         {
             if(IsCroll())
                 StopScroll();
-            MoveToSide(-1);
+            MoveToSide(-1, false);
         }
 
         if (Input.GetKeyDown(KeyCode.D))
         {
             if(IsCroll())
                 StopScroll();
-            MoveToSide(1);
+            MoveToSide(1, false);
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && _isGround)
@@ -137,12 +138,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void MoveToSide(int direction)
+    private void MoveToSide(int direction, bool blockMovement)
     {
         int newSide = _currentPosition + direction;
         var side = _roadsList.Find(road => road.RoadId == newSide);
-        if (side != null)
+        if (side != null && !_isGettingHit)
         {
+            if (blockMovement)
+                _isGettingHit = true;
+            
             if (newSide == _oldPosition && _moveSequence != null)
             {
                 _moveSequence.Kill();
@@ -160,6 +164,8 @@ public class PlayerController : MonoBehaviour
                     .SetEase(Ease.InOutSine))
                 .OnComplete(() =>
                 {
+                    if (_isGettingHit)
+                        _isGettingHit = false;
                     _moveSequence = null;
                 });
             //Нельзя добавлять к секуенсе, которая стартовала уже. Шоб было как в сабвей серфе нужно добавить костыль с очередью секуенцев
@@ -231,13 +237,13 @@ public class PlayerController : MonoBehaviour
             _chunksGeneratorController.GameOver();
         }
         
-        if (collision.gameObject.CompareTag("Hit"))
+        if (collision.gameObject.CompareTag("Hit") && !_isGettingHit)
         {
             Debug.Log("Get hit");
             if(_currentPosition > _oldPosition)
-                MoveToSide(-1);
+                MoveToSide(-1, true);
             else
-                MoveToSide(1);
+                MoveToSide(1, true);
         }
         
     }
