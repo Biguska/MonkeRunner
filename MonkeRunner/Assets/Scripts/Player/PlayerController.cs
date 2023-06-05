@@ -64,23 +64,22 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask _hillMask;
     
     [SerializeField] private Animator _animator;
+    public int _bananaScore = 0;
     
+    //Хуйня для движения
     private Rigidbody _rigidbody;
-    
-    public int _currentPosition = 0;
-    public int _oldPosition = 0;
+    private int _currentPosition = 0;
+    private int _oldPosition = 0;
     private bool _isMovingSide = false;
-    public Sequence _moveSequence;
-    
+    private Sequence _moveSequence;
     public bool _isGround = true;
     private bool _isJumping = false;
     private bool _isCameraDown = true;
     private bool _isGettingHit = false;
-    
     public bool _isCroll = false;
     private IEnumerator _crollCoroutine = null;
-    [SerializeField] private float _crollTime = 1f;
-    [SerializeField] private float _dashTime = .25f;
+    private float _crollTime = 1f;
+    private float _dashTime = .25f;
 
     private void Start()
     {
@@ -245,6 +244,12 @@ public class PlayerController : MonoBehaviour
             else
                 MoveToSide(1, true);
         }
-        
+
+        if (collision.gameObject.CompareTag("Banana"))
+        {
+            var banana = collision.gameObject.GetComponent<BananaController>();
+            banana.Disable();
+            _bananaScore++;
+        }
     }
 }
