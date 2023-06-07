@@ -52,9 +52,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Transform _mainCamera;
     [SerializeField] private ChunksGeneratorController _chunksGeneratorController;
-    [SerializeField] private GameObject _playerObject;
     [SerializeField] private CapsuleCollider _playerCollider;
-    [SerializeField] private Transform _playerModel;
     [SerializeField] private float _jumpForce = 57f;
     [SerializeField] private float _diveForce = 90f;
 
@@ -78,12 +76,12 @@ public class PlayerController : MonoBehaviour
     private bool _isGettingHit = false;
     public bool _isCroll = false;
     private IEnumerator _crollCoroutine = null;
-    private float _crollTime = 1f;
+    private float _crollTime = .6f;
     private float _dashTime = .25f;
 
     private void Start()
     {
-        _rigidbody = _playerObject.GetComponent<Rigidbody>();
+        _rigidbody = gameObject.GetComponent<Rigidbody>();
     }
 
     private void Update()
@@ -92,6 +90,8 @@ public class PlayerController : MonoBehaviour
 
         if (_isGround && _rigidbody.velocity.y == 0f)
             _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, -1f, _rigidbody.velocity.z);
+        
+        _animator.SetBool("IsGround", _isGround);
 
         if (transform.localPosition.y > 2.6f && _isCameraDown)
         {
@@ -143,6 +143,7 @@ public class PlayerController : MonoBehaviour
         var side = _roadsList.Find(road => road.RoadId == newSide);
         if (side != null && !_isGettingHit)
         {
+            _animator.SetTrigger((direction == 1) ? "DashRight" : "DashLeft");
             if (blockMovement)
                 _isGettingHit = true;
             
@@ -174,6 +175,7 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
+        _animator.SetTrigger("Jump");
         _rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
     }
 
@@ -184,6 +186,7 @@ public class PlayerController : MonoBehaviour
             _rigidbody.AddForce(Vector3.down * _diveForce, ForceMode.Impulse);
         }
 
+        _animator.SetTrigger("Croll");
         _crollCoroutine = CrollCoroutine();
         StartCoroutine(_crollCoroutine);
     }
@@ -198,19 +201,15 @@ public class PlayerController : MonoBehaviour
     private void StartCroll()
     {
         _isCroll = true;
-        _playerCollider.center = new Vector3(0f, 0.5f, 0f);
-        _playerCollider.height = 1f;
-        _playerModel.localPosition = new Vector3(0f, 0.675f, 0f);
-        _playerModel.localScale = new Vector3(1.5f, 1.25f, 1f);
+        _playerCollider.center = new Vector3(0f, 0.625f, 0f);
+        _playerCollider.height = 1.25f;
     }
 
     private void EndCroll()
     {
         _isCroll = false;
-        _playerCollider.center = new Vector3(0f, 1f, 0f);
-        _playerCollider.height = 2f;
-        _playerModel.localPosition = new Vector3(0f, 1.25f, 0f);
-        _playerModel.localScale = new Vector3(1.5f, 2.5f, 1f);
+        _playerCollider.center = new Vector3(0f, 1.25f, 0f);
+        _playerCollider.height = 2.5f;
         _crollCoroutine = null;
     }
 
