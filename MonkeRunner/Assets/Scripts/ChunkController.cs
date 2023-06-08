@@ -6,6 +6,8 @@ using UnityEngine;
 public class ChunkController : MonoBehaviour
 {
     [SerializeField] private ChunksGeneratorController _chunksGeneratorController;
+    [SerializeField] private List<BananaController> _bananaList;
+    [SerializeField] private bool _isStart = false;
     
     private void OnTriggerEnter(Collider obj)
     {
@@ -16,12 +18,20 @@ public class ChunkController : MonoBehaviour
 
         if (obj.gameObject.CompareTag("ChunkRemove"))
         {
-            _chunksGeneratorController.RemoveChunk(gameObject);
-            ResetChunk();
+            if (!_isStart)
+            {
+                _chunksGeneratorController.RemoveChunk(gameObject);
+                ResetChunk();
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
     private void ResetChunk()
     {
+        _bananaList.ForEach(banana => banana.Reset());
     }
 }

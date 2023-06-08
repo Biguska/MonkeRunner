@@ -10,6 +10,8 @@ TagManager:
   - Hill
   - Obstacle
   - Hit
+  - Banana
+  - BananaTrigger
   layers:
   - Default
   - TransparentFX

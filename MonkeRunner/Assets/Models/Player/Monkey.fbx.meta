@@ -1,11 +1,17 @@
 fileFormatVersion: 2
-guid: 5119137fba0e53846a38406a42bb86a2
+guid: b1fdaa0488055324aa709a62415393e3
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable:
   - first:
-      74: 6551523662080165128
-    second: Armature|Down.001
+      74: 6435629338271495417
+    second: Armature|DashLeft
+  - first:
+      74: -4485246855393758569
+    second: Armature|DashRight
+  - first:
+      74: -7083017359317430695
+    second: Armature|Down
   - first:
       74: -2065775210875148712
     second: Armature|Fly
@@ -18,9 +24,6 @@ ModelImporter:
   - first:
       74: -7551964380084998518
     second: Armature|Run
-  - first:
-      74: -7083017359317430695
-    second: Armature|Down
   - first:
       74: 3252896763152548526
     second: Armature|Stop
@@ -59,11 +62,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Armature|Down.001
-      takeName: Armature|Down.001
+      name: Armature|DashLeft
+      takeName: Armature|DashLeft
       internalID: 0
       firstFrame: 0
-      lastFrame: 1
+      lastFrame: 30
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -71,6 +74,64 @@ ModelImporter:
       loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Armature|DashRight
+      takeName: Armature|DashRight
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Armature|Down
+      takeName: Armature|Down
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -187,35 +248,6 @@ ModelImporter:
       loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 1
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: Armature|Down
-      takeName: Armature|Down
-      internalID: 0
-      firstFrame: 0
-      lastFrame: 30
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
